@@ -118,7 +118,7 @@ public class ProcessDefinitionTest {
 
 		List<ProcessDefinition> list = engine.getRepositoryService()
 				.createProcessDefinitionQuery()
-				.processDefinitionKey("helloworld")
+				.processDefinitionKey("helloWorld")
 				.orderByProcessDefinitionVersion().asc().list();
 		
 		if (list != null && list.size() > 0) {
