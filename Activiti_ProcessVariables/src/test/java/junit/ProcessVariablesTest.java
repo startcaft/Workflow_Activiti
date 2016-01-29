@@ -1,11 +1,13 @@
 package junit;
 
 import java.util.Date;
+import java.util.List;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
 import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
+import org.activiti.engine.history.HistoricActivityInstance;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.junit.Test;
@@ -148,5 +150,26 @@ public class ProcessVariablesTest {
 //		taskService.getVariable(taskId, variableName);									//使用任务ID和流程变量名，获取流程变量的值
 //		taskService.getVariables(taskId);												//使用任务ID，获取流程一个Map集合，Map的key就是流程变量的名称，Map的value就是流程变量的值
 //		taskService.getVariables(taskId, variableNames);								//使用任务ID，和流程变量名的集合，获取一个Map，Map的key就是流程变量的名称，Map的value就是流程变量的值
+	}
+	
+	/** 查询历史活动 **/
+	@Test
+	public void findHistoryActiviti(){
+		
+		String processInstanceId = "27501";
+		
+		List<HistoricActivityInstance> list = engine.getHistoryService()
+											.createHistoricActivityInstanceQuery()
+											.processInstanceId(processInstanceId)
+											.list();
+		
+		if (list != null && list.size() > 0) {
+			for (HistoricActivityInstance ha : list) {
+				System.out.println("活动ID：" + ha.getActivityId());
+				System.out.println("活动名称:" + ha.getActivityName());
+				System.out.println("活动开始时间:" + ha.getStartTime());
+				System.out.println("活动结束时间:" + ha.getEndTime());
+			}
+		}
 	}
 }
