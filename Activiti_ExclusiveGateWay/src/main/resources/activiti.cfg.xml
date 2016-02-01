@@ -1,0 +1,33 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+	
+    <!-- 
+    	ProcessEngineConfiguration pcEngine = ProcessEngineConfiguration.createStandaloneProcessEngineConfiguration();
+		pcEngine.setJdbcDriver("com.mysql.jdbc.Driver");
+		pcEngine.setJdbcUrl("jdbc:mysql://localhost:3306/activiti");
+		pcEngine.setJdbcUsername("root");
+		pcEngine.setJdbcPassword("5904395");
+		
+		/**
+		 * public static final String DB_SCHEMA_UPDATE_FALSE = "false"					不能自动创建表，需要表存在；
+  		 * public static final String DB_SCHEMA_UPDATE_CREATE_DROP = "create-drop";		先删除表，再创建表；
+  		 * public static final String DB_SCHEMA_UPDATE_TRUE = "true"					如果表不存在，自动东创建
+		 */
+		pcEngine.setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
+    -->
+	<bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
+		<property name="jdbcDriver" value="com.mysql.jdbc.Driver"></property>
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/activiti"></property>
+		<property name="jdbcUsername" value="root"></property>
+		<property name="jdbcPassword" value="5904395"></property>
+		<property name="databaseSchemaUpdate" value="true"></property>
+	</bean>
+
+</beans>
