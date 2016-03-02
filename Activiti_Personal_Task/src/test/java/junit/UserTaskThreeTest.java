@@ -89,4 +89,13 @@ public class UserTaskThreeTest {
 		
 		System.out.println("完成任务");
 	}
+	
+	
+	/* 可以分配个人任务从一个人到另外一个任务(认领任务，比如说有人离职了) */
+	public void setAssgineeTask(){
+		
+		String taskId = "130004";
+		processEngine.getTaskService()
+				.setAssignee(taskId, "灭绝师太");
+	}
 }
