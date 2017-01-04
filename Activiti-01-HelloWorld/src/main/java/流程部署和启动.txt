@@ -1,0 +1,50 @@
+流程资源：
+1，流程定义文件：.bpmn的xml文件
+2，流程定义图片：一般用PNG的格式
+3，表单文件：.drl文件
+  
+BPMN没有一个版本的概念，在绘制流程图时，我们通过给.bpmn.xml文件设置一个id（也叫给ProcessDefinition签名一个版本）。
+对于每一个流程定义会执行下面的步骤来初始化一个key，version，name和id：
+	1，xml文件中的流程定义的id属性是被用于作为流程定义的key属性；
+	2，xml文件中的流程定义的name属性是被用于流程定义的name属性，如果name属性没有指定，那么id属性被作为name属性；
+	3，一个有特殊key的流程第一次被属性，版本号为1。对于拥有同样key的流程定义，所以之后的部署，版本号会递增1；
+	4，流程定义id属性被设置成{processDefinitionKey}:{processDefinitionVersion}:{generated-id}
+
+
+1，部署流程资源的方式：
+	1-1：classpath方式（ 一次只能加载一个资源文件）
+		Deployment deployment = repositoryService.createDeployMent()
+								.name("流程定义名称")
+								.addClasspathResource("流程定义文件.bpmn")
+								.addClasspathResource("流程定义文件.png")
+								.deploy();
+	1-2：InputStream方式（输入流的来源不限，一次只能加载一个输入流）
+		Deployment deployment = repositoryService.createDeployMent()
+								.name("流程定义名称")
+								.addInputStream("流程定义文件.bpmn",bpmnFileInputStream)
+								.addInputStream("流程定义文件.png",pngFileInputStream)
+								.deploy();
+	1-3：字符串方式（原理是把一组字符串的内容转化为字节流后再部署【.bpmn文件的字符串】）
+		Deployment deployment = repositoryService.createDeployMent()
+								.name("流程定义名称")
+								.addString("流程定义文件.bpmn","<?xml version=\"1.0\" encoding=\"UTF-8\"?><definitions>...</definitions>")
+								.deploy();
+	1-4：zip/bar格式压缩包方式（官方推荐将.bpmn和.png文件打包成zip/bar压缩包，可以同时打包多个文件）
+		Deployment deployment = repositoryService.createDeployMent()
+								.name("流程定义名称")
+								.addZipInputStream(zipInputStream)
+								.deploy();
+
+
+2，启动流程可以用过流程ID，也可以通过流程的key，如果通过key来启动，比如：
+	runtimeService.startProcessInstanceByKey("test1", "b2KEY", variableMap); 
+	其中 "test1" 是流程的key；
+	其中 "b2KEY" 是流程实例的businessKey值（可以理解为业务表单主键，比如一张请假单的主键ID），
+		如果同一个流程KEY用同一个businessKey来启动就会报错com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException；
+		activiti不允许同一个流程使用相同的businessKey，这很好理解，一个业务数据的ID不能使用同一个流程2次；
+
+		
+***流程部署和启动流程涉及到的表：
+1，ACT_RE_DEPLOYMENT（流程部署对象表）
+2，ACT_GE_BYTEARRAY（资源文件表）
+3，ACT_GE_PROPERTY（主键生成表） 

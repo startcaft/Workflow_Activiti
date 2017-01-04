@@ -1,0 +1,17 @@
+activiti.cfg.xml就是Activiti工作流的默认配置文件
+	跟Hibernate类似，但是配置内容和Spring IOC的配置一致，其命名空间使用的都是Spring的命名空间spring-bean，
+	所以，Activiti天生就和Spring是无缝集成的。
+
+1，定义一个bean，类型为org.activiti.engine.ProcessEngineConfiguration 的子类，它有几个重要的参属性：
+	1-1，databaseType------数据库类型，默认为H2，当使用非H2数据库时需要特别声明。
+			目前Activiti支持的数据库有，H2,MySQL，Oracle，Postgres，MSSQL，DB2；
+	1-2，databseSchemaUpdate------数据库脚本更新策略，和Hibernate的机制类似，取值如下
+			false（什么都不做），true（当工作流的表不存在时自动创建） ，create-drop（创建引擎时初始化脚本，引擎销毁时删除数据库脚本）；
+	1-3，jobExecutorActivate------用来设置事都启用作用执行功能，默认为false；为true时，引擎会不间断地刷新数据库的作业表，检查是否存在需要执行的作业，有责触发作业的执行，作业的来源有多种，例如各种时间事件或异步任务执行；
+	1-4，histor------用来设置记录历史的级别，默认为audit，支持一下几种类型：
+		none（不保存任何历史记录），可以提高系统性能
+		activity（保存所有的流程实例，任务，活动信息）
+		audit（保存所有的流程实例，任务，活动，表单属性）
+		full（最完成的历史记录，还包括流程变量等等）
+	1-5，activityFontName，默认为Arial，如果要查看流程图的图片，并且不会显示中文乱码，最好设置为宋体；
+	1-6，labelFontName，默认为Arial，同上；
