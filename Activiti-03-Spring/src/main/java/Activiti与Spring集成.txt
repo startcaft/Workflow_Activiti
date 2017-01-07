@@ -1,0 +1,18 @@
+与Spring继承的目的就是把Activiti引擎 和 各种Service 的产生方式由 Spring 代理统一管理，以及业务与流程引擎的统一事务管理
+(这也是与Spring集成的一个重要原因)。
+Activiti提供了一个专门的模块 "activiti-spring"，由 Spring 团队的布道者 Josh Long 主导开发。
+
+在 Activiti-01-HelloWorld 模块中已经说过，创建引擎，会先设置一系列参数，然后根据这些参数创建引擎对象，
+对于 Spring 方式也是一样:
+1，在Spring IOC容器中配置一个类型为 "org.activiti.spring.SpringProcessEngineConfiguration" 的 引擎配置Bean
+	指定dataSource属性
+	指定transactionManager属性（Activiti内部使用Myabtis，必须实现指定事务管理器）
+	指定activiti的一些常规配置
+	自动部署属性------deploymentResources
+		1，自动部署流程定义是利用 Spring 提供的 Resource 功能实现，所以部署来源可以有很多classpath，file等等；
+		2，一次性可以部署多个流程定义，采用通配符的方式classpath:xxx/yyy/zzz/*/*.bpmn；
+		3，Activiti内部会自动排除重复的流程定义，只有流程数据库中没有和自动部署的流程定义相同的记录时才会部署，否则忽略；
+		4，流程定义的自动部署，对于新系统的上线或者在加入新的流程时常常会用到；
+	
+2，在Spring IOC容器中配置一个类型为 "org.activiti.spring.ProcessEngineFactoryBean" 的引擎Bean
+	指定processEngineConfiguration（注入引擎配置对象）

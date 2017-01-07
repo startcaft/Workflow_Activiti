@@ -1,0 +1,32 @@
+在流程定义中几乎所有的属性都可以使用变量的方式来定义，这样可以在运行中灵活地设置。
+对表达式的解析由 JUEL 根据 UEL（Unified Expression Language）规范实现，之后 Activiti 又对 JUEL进行了扩展以满足更多的需求。
+
+熟悉 JSP 的读者对 UEL 并不会陌生了，通过 ${} 包裹的表达式即可读取变量值，计算变量值等操作，
+不过经过 Activiti 改造过的 UEL 功能更加的强大，下面是表达式的一些典型应用：
+1，${myar}------获取变量名称为 myVar 的变量值；
+2，${myVar.name}------从变量 myVar 中读取 name 属性的值；
+3，${serviceBean.confirm()}------执行变量名称为 serviceBean 的 confirm() 方法；
+4，${serviceBean.confirm('startcaft')}------执行变量名称 serviceBean 的 confirm() 方法，同时以字符串 "startcaft"作为参数，
+											这里的字符串也可以使用变量代替，如${serviceBean.confirm(name)}
+5，${serviceBean.confirm(name,execution)}------执行变量名称 serviceBean 的 confirm() 方法，并传入名称为 name 的变量作为第一个参数，
+											传入引擎内置的变量 execution 作为第二个参数；
+
+引擎内置的三个变量：
+1，execution------此变量在运行阶段总是可以调用的，对应接口：org.activiti.engine.delegate.DelegateExecution，
+					可以获取流程实例的变量，包含一些执行器的信息项，如流程实例ID，流程实例关联的业务ID，当前节点等；
+
+2，task------相对于 execution 变量的作用域就比较小了，execution 可以在整个运行期的所有活动上使用，但是 task（DeleateTask接口）
+				仅仅支持用户任务，而且限定为 expression 类型的表达式；
+
+3，authenticatedUserId------此变量仅在启动流程实例前调用 identityService 的 setAuthenticatedUserId() 方法时才会由引擎提供，
+				获取的方式很简单，执行 ${authenticatedUserId} 即可；
+
+
+在Activiti中表达式非常广泛，通过表达式可以动态计算（读取）一切可以计算的表达式，从而获取动态的值。
+例如可以动态设置用户任务的办理人（activiti:assignee属性），执行一个 Java Service 任务，或者执行 Execution 监听器，
+Task 监听，还有在流程中排他分支的输出流条件判断等。
+
+
+Sprinig管理变量
+使用Spring管理变量可以避免由引擎保存复杂变量（自定义的Bean）到数据库，在配置引擎配置对象的时候配置其 beans 属性，
+该属性是一个map，里面每一个entry的可以就是变量的名称，value-ref就是变量的引用或者值；
