@@ -1,0 +1,33 @@
+Activiti中内置了一套用户，组的关系，以及如何通过 API 添加，删除，查询；
+其中，组可以理解为我们通常所说的角色，它和用户的关系是多对多的；
+
+org.activiti.engine.IdentityService 就是Activiti的 用户与组 的服务层对象；
+
+IdentityService操作用户：
+1，IdentityService#newUser(userId)------创建指定名称的用户，
+		返回的是 org.activiti.engine.identity.User 接口的实现类 org.activiti.engine.impl.persistence.entity.UserEntity 的实例；
+
+2，IdentityService#saveUser(User)------保存一个用户到数据库中；
+
+3，IdentityService#createUserQuery()------返回一个针对用户实体的查询对象，使用它可以针对实体的属性进行过滤，并返回该实体的对象或集合；
+
+4，IdentityService#deleteUser(User)------从数据库中删除一个用户；
+
+
+IdentityService操作组：
+1，IdentityService#newGroup(grouId)------创建指定名称的组，
+		返回的是 org.activiti.engine.identity.Group 接口的实现类 org.activiti.engine.impl.persistence.entity.GroupEntity 的实例；
+
+2，IdentityService#saveGroup(Group)------保存一个组到数据库中；
+
+3，IdentityService#createGroupQuery()------返回一个针对组实体的查询对象，可以针对实体的属性进行过滤，并返回该实体的对象或集合；
+
+4，IdentityService#deleteGroup(Group)------从数据库中删除一个组；
+
+
+IdentityService操作用户与组的关系：
+1，IdentityService#createMembership(userId,grouId)------添加指定用户到指定的组中；
+
+2，GroupQuuery#groupMember(userName)------查询指定用户所在的组，返回一个 Group 接口；
+
+3，IdentiytyService#deleteMembership()------删除一个用户和一个组之间的关联关系；
