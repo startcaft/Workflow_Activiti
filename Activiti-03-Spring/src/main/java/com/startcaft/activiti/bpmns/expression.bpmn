@@ -2,12 +2,23 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
   <process id="expression" name="expression" isExecutable="true">
     <startEvent id="startevent1" name="Start"></startEvent>
-    <serviceTask id="servicetask1" name="获取流程启动人" activiti:resultVariableName="authenticatedUserIdForTest" activiti:skipExpression="${authenticatedUserId}"></serviceTask>
-    <serviceTask id="servicetask2" name="计算表达式" activiti:resultVariableName="returnValue" activiti:skipExpression="${myBean.print(name)}"></serviceTask>
-    <serviceTask id="servicetask3" name="Execution变量" activiti:resultVariableName="businessKey" activiti:skipExpression="${myBean.printBkey(execution)}"></serviceTask>
+    <serviceTask id="servicetask1" name="获取流程启动人" 
+    	activiti:resultVariableName="authenticatedUserIdForTest" 
+    	activiti:expression="${authenticatedUserId}">
+    </serviceTask>
+    <serviceTask id="servicetask2" name="计算表达式" 
+    	activiti:resultVariableName="returnValue" 
+    	activiti:expression="${myBean.print(name)}">
+    </serviceTask>
+    <serviceTask id="servicetask3" name="Execution变量" 
+    	activiti:resultVariableName="businessKey" 
+    	activiti:expression="${myBean.printBkey(execution)}">
+    </serviceTask>
     <userTask id="usertask1" name="在用户任务上添加表达式">
       <extensionElements>
-        <activiti:taskListener event="create" expression="${myBean.invokeTask(task)}"></activiti:taskListener>
+        <activiti:taskListener event="create" 
+        	expression="${myBean.invokeTask(task)}">
+        </activiti:taskListener>
       </extensionElements>
     </userTask>
     <endEvent id="endevent1" name="End"></endEvent>
